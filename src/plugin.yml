@@ -1,11 +1,8 @@
-name: Template Plugin
-main: com.minecarts.templateplugin.TemplatePlugin
+name: TownCrier
+main: com.minecarts.towncrier.TownCrier
 version: 1.0.0
 website: http://minecarts.com
 author: Verrier
+depend: [BarrensChat, ObjectData]
 description: >
-             A description of your plugin
-commands:
-  test:
-    description: Do the test feature!
-    usage: /<command>
+             Support plugin for server wide announcements
