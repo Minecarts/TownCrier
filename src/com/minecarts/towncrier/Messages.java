@@ -61,8 +61,10 @@ public class Messages {
                 "{0}[{1}] {2}{0} tripped and fell onto a cactus."
                 ));
         Death.put(DamageCause.SUFFOCATION, Arrays.asList(
-                "{0}[{1}] {2}{0} cannot not breathe when burried alive.",
-                "{0}[{1}] {2}{0} was burried alive."
+                "{0}[{1}] {2}{0} cannot not breathe when buried alive.",
+                "{0}[{1}] {2}{0} was buried alive.",
+                "{0}[{1}] {2}{0} was trapped in a cave in.",
+                "{0}[{1}] A cave in trapped and killed {2}{0}."
                 ));
         Death.put(DamageCause.FALL, Arrays.asList(
                 "{0}[{1}] {2}{0} wondered why the ground was rushing toward him...",
