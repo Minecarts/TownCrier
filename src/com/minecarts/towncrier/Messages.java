@@ -60,15 +60,16 @@ public class Messages {
                 "{0}[{1}] {2}{0} tripped and fell onto a cactus."
                 ));
         Death.put(DamageCause.SUFFOCATION, Arrays.asList(
-                "{0}[{1}] {2}{0} cannot not breathe when burried alive."
+                "{0}[{1}] {2}{0} cannot not breathe when burried alive.",
+                "{0}[{1}] {2}{0} was burried alive."
                 ));
         Death.put(DamageCause.FALL, Arrays.asList(
                 "{0}[{1}] {2}{0} wondered why the ground was rushing toward him...",
                 "{0}[{1}] The ground disappeared from under {2}{0}.",
                 "{0}[{1}] {2}{0} fell to his death.",
-                "{0}[{1}] {2}{0} didn't bring their parachute",
-                "{0}[{1}] {2}{0} forgot a parachute",
-                "{0}[{1}] {2}{0} took a misguided leap of faith"
+                "{0}[{1}] {2}{0} didn't bring their parachute.",
+                "{0}[{1}] {2}{0} forgot a parachute.",
+                "{0}[{1}] {2}{0} took a misguided leap of faith."
                 ));
         Death.put(DamageCause.FIRE, Arrays.asList(
                 "{0}[{1}] {2}{0} died in a fire.",
@@ -96,8 +97,8 @@ public class Messages {
                 "{0}[{1}] {2}{0} had a premature detonation."
                 ));
         Death.put(DamageCause.VOID, Arrays.asList(
-                "{0}[{1}] {2}{0} fell through the world",
-                "{0}[{1}] {2}{0} discovered bedrock isn't always solid"
+                "{0}[{1}] {2}{0} fell through the world.",
+                "{0}[{1}] {2}{0} discovered bedrock isn't always solid."
                 ));
         NoCause.put("Unknown", Arrays.asList(
                 "{0}[{1}] {2}{0} died from unknown causes."
@@ -107,7 +108,7 @@ public class Messages {
                 "a creeper",
                 "a cute creeper",
                 "an adorable creeper",
-                "a scared creeper"
+                "a lonely creeper"
         ));
         CreatureNames.put(CreatureType.GHAST, Arrays.asList(
                 "a frenzied ghast",
