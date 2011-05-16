@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.util.config.Configuration;
 
 import org.bukkit.event.*;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class TownCrier extends org.bukkit.plugin.java.JavaPlugin{
         pm.registerEvent(Event.Type.ENTITY_DEATH, this.entityListener, Event.Priority.Monitor, this);
 
         //Initialize our messages because java isn't super awesome
-        Messages.initialize();
+        Messages.initialize(getConfiguration());
         
         log.info("[" + pdf.getName() + "] version " + pdf.getVersion() + " enabled.");
     }
