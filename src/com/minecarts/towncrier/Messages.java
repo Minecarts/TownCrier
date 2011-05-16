@@ -21,7 +21,7 @@ public class Messages {
         
         //Player killed another player
         PVP.put(DamageCause.ENTITY_ATTACK, Arrays.asList(
-                "{0}[{1}] {2}{0} was killed by {3}''s{0} {4}{0}.",
+                "{0}[{1}] {2}{0} was killed by {3}{0}''s {4}{0}.",
                 "{0}[{1}] {3}{0} just killed {2}{0} with a {4}{0}."
                 ));
         //PVP Custom == suicide
@@ -37,7 +37,8 @@ public class Messages {
                 "{0}[{1}] {2}{0} took on {3}{0} and lost.",
                 "{0}[{1}] {2}{0} failed to defeat {3}{0}.",
                 "{0}[{1}] {3}{0} sent {2}{0} back to the spawn.",
-                "{0}[{1}] {3}{0} was no match for {2}{0}."
+                "{0}[{1}] {3}{0} stole all of {2}{0}''s items.",
+                "{0}[{1}] {2}{0} was no match for {3}{0}."
                 ));
         Death.put(DamageCause.DROWNING, Arrays.asList(
                 "{0}[{1}] {2}{0} couldn''t find nemo in time.",
