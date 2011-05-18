@@ -1,6 +1,6 @@
 name: TownCrier
 main: com.minecarts.towncrier.TownCrier
-version: 1.0.1
+version: 1.0.2
 website: http://minecarts.com
 author: Verrier
 depend: [BarrensChat, ObjectData]

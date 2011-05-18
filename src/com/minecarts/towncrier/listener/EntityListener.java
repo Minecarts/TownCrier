@@ -1,6 +1,7 @@
 package com.minecarts.towncrier.listener;
 
 
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -36,13 +37,21 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
             if(event.getDamager() instanceof Player){
                 Player attacker = (Player) event.getDamager();
                 Player[] involvedPlayers = {attacker, victim};
-                //PVP Kill
-                plugin.announceMessage(
-                        involvedPlayers, 
-                        Messages.getRandomMessage("PVP",event.getCause()), 
-                        victim.getDisplayName(), 
-                        attacker.getDisplayName(),
-                        attacker.getItemInHand().getType().toString());
+                if(attacker.getName() == victim.getName()){
+                    //Suicide!
+                    plugin.announceMessage(involvedPlayers, 
+                            Messages.getRandomMessage("Suicide"), 
+                            victim.getDisplayName()
+                            );
+                } else {
+                  //PVP Kill
+                    plugin.announceMessage(
+                            involvedPlayers, 
+                            Messages.getRandomMessage("PVP",event.getCause()), 
+                            victim.getDisplayName(), 
+                            attacker.getDisplayName(),
+                            Messages.getItemName(attacker.getItemInHand().getType()));
+                }
             } else {
                 Player[] involvedPlayers = {victim};
                 //Entity Kill
@@ -54,7 +63,7 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
             }
 
         } else if (eventDamage instanceof EntityDamageByProjectileEvent){
-            EntityDamageByProjectileEvent event = (EntityDamageByProjectileEvent) eventDamage;
+            //EntityDamageByProjectileEvent event = (EntityDamageByProjectileEvent) eventDamage;
             System.out.println("shot death?!");
         } else {
             Player[] involvedPlayers = {victim};

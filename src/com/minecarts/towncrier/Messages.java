@@ -16,7 +16,7 @@ public class Messages {
     public static HashMap<String,List<String>> NoCause = new HashMap<String,List<String>>();
     
     public static HashMap<CreatureType,List<String>> CreatureNames = new HashMap<CreatureType,List<String>>();
-    public static HashMap<Material,String> ItemNames = new HashMap<Material,String>();
+    public static HashMap<Material,List<String>> ItemNames = new HashMap<Material,List<String>>();
     
     private static final Random random = new Random(); 
     public static void initialize(org.bukkit.util.config.Configuration config){
@@ -35,6 +35,7 @@ public class Messages {
         Death.put(DamageCause.ENTITY_EXPLOSION, config.getStringList("DEATH.ENTITY_EXPLOSION",null));
         Death.put(DamageCause.VOID, config.getStringList("DEATH.VOID",null));
         NoCause.put("Unknown", config.getStringList("NoCause.Unknown",null));
+        NoCause.put("Suicide", config.getStringList("NoCause.Suicide",null));
         
         CreatureNames.put(CreatureType.CREEPER, config.getStringList("CreatureNames.CREEPER",null));
         CreatureNames.put(CreatureType.GHAST,config.getStringList("CreatureNames.GHAST",null));
@@ -45,10 +46,13 @@ public class Messages {
         CreatureNames.put(CreatureType.SPIDER, config.getStringList("CreatureNames.SPIDER",null));
         CreatureNames.put(CreatureType.WOLF,config.getStringList("CreatureNames.WOLF",null));
         CreatureNames.put(CreatureType.ZOMBIE, config.getStringList("CreatureNames.ZOMBIE",null));
+        
+        ItemNames.put(Material.AIR, config.getStringList("ItemNames.AIR",null));
 
     }
     public static String getRandomMessage(String causeKey){
         List<String> messages = NoCause.get(causeKey);
+        if(messages == null || messages.size() == 0) return "{0}[{1}] {2}{0} died!";
         return messages.get(random.nextInt(messages.size()));
     }
     public static String getRandomMessage(String type, DamageCause damageCause){
@@ -58,7 +62,7 @@ public class Messages {
         } else {
             messages = Death.get(damageCause);
         }
-        if(messages == null) return "{2}{0} died.";
+        if(messages == null || messages.size() == 0) return "{0}[{1}] {2}{0} died.";
         return messages.get(random.nextInt(messages.size()));
     }
     public static String getCeatureName(org.bukkit.entity.Entity monster){
@@ -77,7 +81,7 @@ public class Messages {
         if(messages == null) return monster.toString();
         return messages.get(random.nextInt(messages.size()));
     }
-    public String getItemName(Material item){
+    public static String getItemName(Material item){
         String itemName = item.toString().replace('_', ' ');
         return itemName.toLowerCase();
     }
