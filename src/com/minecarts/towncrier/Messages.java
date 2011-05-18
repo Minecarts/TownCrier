@@ -81,8 +81,13 @@ public class Messages {
         if(messages == null) return monster.toString();
         return messages.get(random.nextInt(messages.size()));
     }
-    public static String getItemName(Material item){
-        String itemName = item.toString().replace('_', ' ');
-        return itemName.toLowerCase();
+    public static String getItemName(Material item){        
+        List<String> messages = ItemNames.get(item);
+        if(messages == null || messages.size() == 0){
+            String itemName = item.toString().replace('_', ' ');
+            return itemName.toLowerCase();
+        } else {
+            return messages.get(random.nextInt(messages.size()));
+        }       
     }
 }
