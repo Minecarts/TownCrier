@@ -21,8 +21,7 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
     public void onEntityDeath(EntityDeathEvent eventDeath){
         if(!(eventDeath.getEntity() instanceof Player)) return;
         Player victim = (Player) eventDeath.getEntity();
-        EntityDamageEvent eventDamage = (EntityDamageEvent) plugin.objectData.shared.get(eventDeath.getEntity(), "lastDamageEvent");
-
+        EntityDamageEvent eventDamage = (EntityDamageEvent) victim.getLastDamageCause();
         if(eventDamage == null){
             //Unknown causes
             String format = Messages.getRandomMessage("Unknown");
