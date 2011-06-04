@@ -14,7 +14,7 @@ import com.minecarts.sandandgravel.game.Game.State;
 public class EventListener extends org.bukkit.event.CustomEventListener{
     
     private final String SaG_Defeat = "{0}[{1}] {2}{0} defeated {3}{0} at Sand and Gravel!";
-    private final String SaG_Tie = "{2}{0} and {3}{0} tied in an epic match of Sand and Gravel!";
+    private final String SaG_Tie = "{0}[{1}] {2}{0} and {3}{0} tied in an epic match of Sand and Gravel!";
     
     private TownCrier plugin;
     public EventListener(TownCrier plugin){
