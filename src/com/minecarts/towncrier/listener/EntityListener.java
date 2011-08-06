@@ -5,7 +5,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.entity.Player;
 
 import com.minecarts.towncrier.Messages;
@@ -38,16 +37,13 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
                 Player[] involvedPlayers = {attacker, victim};
                 if(attacker.getName() == victim.getName() && event.getCause() != DamageCause.CUSTOM){
                     //Suicide!
-                    plugin.announceMessage(involvedPlayers, 
-                            Messages.getRandomMessage("Suicide"), 
-                            victim.getDisplayName()
-                            );
+                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Suicide"), victim.getDisplayName());
                 } else {
                   //PVP Kill
                     plugin.announceMessage(
-                            involvedPlayers, 
+                            involvedPlayers,
                             Messages.getRandomMessage("PVP",event.getCause()), 
-                            victim.getDisplayName(), 
+                            victim.getDisplayName(),
                             attacker.getDisplayName(),
                             Messages.getItemName(attacker.getItemInHand().getType()));
                 }
@@ -60,10 +56,6 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
                         victim.getDisplayName(), 
                         Messages.getCeatureName(event.getDamager()));
             }
-
-        } else if (eventDamage instanceof EntityDamageByProjectileEvent){
-            //EntityDamageByProjectileEvent event = (EntityDamageByProjectileEvent) eventDamage;
-            System.out.println("shot death?!");
         } else {
             Player[] involvedPlayers = {victim};
             //General death
