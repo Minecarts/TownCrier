@@ -23,32 +23,28 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
         if(!(eventDeath.getEntity() instanceof Player)) return;
         Player victim = (Player) eventDeath.getEntity();
         EntityDamageEvent eventDamage = (EntityDamageEvent) victim.getLastDamageCause();
-        if(eventDamage == null){
+        if(eventDamage == null){ //No last damage event
             //Unknown causes
             String format = Messages.getRandomMessage("Unknown");
             Player[] involvedPlayers = {victim};
             plugin.announceMessage(involvedPlayers, format,victim.getDisplayName());
-            
         } else if(eventDamage instanceof EntityDamageByEntityEvent){
             //Entity vs Entity!
             EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) eventDamage;
             Integer damage = event.getDamage();
-            
+
+            //PVP of some sort
             if(event.getDamager() instanceof Player){
                 Player attacker = (Player) event.getDamager();
                 Player[] involvedPlayers = {attacker, victim};
+                //Suicide!
                 if(attacker.getName() == victim.getName() && event.getCause() != DamageCause.CUSTOM){
-                    //Suicide!
                     plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Suicide"), victim.getDisplayName());
+                //PVP Kill
                 } else {
-                  //PVP Kill
-                    plugin.announceMessage(
-                            involvedPlayers,
-                            Messages.getRandomMessage("PVP",event.getCause()), 
-                            victim.getDisplayName(),
-                            attacker.getDisplayName(),
-                            Messages.getItemName(attacker.getItemInHand().getType()));
+                    plugin.announceMessage(involvedPlayers,Messages.getRandomMessage("PVP",event.getCause()), victim.getDisplayName(),attacker.getDisplayName(),Messages.getItemName(attacker.getItemInHand().getType()));
                 }
+            //Death by projectile
             } else if (event.getDamager() instanceof Projectile){
                 org.bukkit.entity.LivingEntity shooter = ((Projectile) event.getDamager()).getShooter();
                 if(shooter instanceof Player){
@@ -59,23 +55,16 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
                     Player[] involvedPlayers = {victim};
                     plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",event.getCause()),victim.getDisplayName(),Messages.getCeatureName(shooter));
                 }
+            //Non player entity killed someone
             } else {
                 Player[] involvedPlayers = {victim};
                 //Entity Kill
-                plugin.announceMessage(
-                        involvedPlayers, 
-                        Messages.getRandomMessage("Death",event.getCause()), 
-                        victim.getDisplayName(), 
-                        Messages.getCeatureName(event.getDamager()));
+                plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",event.getCause()), victim.getDisplayName(), Messages.getCeatureName(event.getDamager()));
             }
-        } else {
+        } else { //Not entitydamagedbyentity event
             Player[] involvedPlayers = {victim};
             //General death
-            plugin.announceMessage(
-                    involvedPlayers, 
-                    Messages.getRandomMessage("Death", eventDamage.getCause()), 
-                    victim.getDisplayName());
+            plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death", eventDamage.getCause()), victim.getDisplayName());
         }
-        //e.setCancelled(true);
     }
 }
