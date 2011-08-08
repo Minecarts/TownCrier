@@ -5,10 +5,12 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Player;
 
 import com.minecarts.towncrier.Messages;
 import com.minecarts.towncrier.TownCrier;
+import org.bukkit.event.player.PlayerVelocityEvent;
 
 public class EntityListener extends org.bukkit.event.entity.EntityListener{ 
     private TownCrier plugin;
@@ -46,6 +48,16 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
                             victim.getDisplayName(),
                             attacker.getDisplayName(),
                             Messages.getItemName(attacker.getItemInHand().getType()));
+                }
+            } else if (event.getDamager() instanceof Projectile){
+                org.bukkit.entity.LivingEntity shooter = ((Projectile) event.getDamager()).getShooter();
+                if(shooter instanceof Player){
+                    Player attacker = (Player) shooter;
+                    Player[] involvedPlayers = {victim, attacker};
+                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",event.getCause()),victim.getDisplayName(),attacker.getDisplayName());
+                } else {
+                    Player[] involvedPlayers = {victim};
+                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",event.getCause()),victim.getDisplayName(),Messages.getCeatureName(shooter));
                 }
             } else {
                 Player[] involvedPlayers = {victim};
