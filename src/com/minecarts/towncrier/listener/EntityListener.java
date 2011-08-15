@@ -38,8 +38,8 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
                 Player attacker = (Player) event.getDamager();
                 Player[] involvedPlayers = {attacker, victim};
                 //Suicide!
-                if(attacker.getName() == victim.getName() && event.getCause() != DamageCause.CUSTOM){
-                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Suicide"), victim.getDisplayName());
+                if(attacker.getName() == victim.getName()){
+                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",DamageCause.SUICIDE), victim.getDisplayName());
                 //PVP Kill
                 } else {
                     plugin.announceMessage(involvedPlayers,Messages.getRandomMessage("PVP",event.getCause()), victim.getDisplayName(),attacker.getDisplayName(),Messages.getItemName(attacker.getItemInHand().getType()));

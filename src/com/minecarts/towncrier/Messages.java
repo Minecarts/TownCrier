@@ -35,6 +35,7 @@ public class Messages {
         Death.put(DamageCause.PROJECTILE, config.getStringList("DEATH.PROJECTILE",null));
         Death.put(DamageCause.ENTITY_EXPLOSION, config.getStringList("DEATH.ENTITY_EXPLOSION",null));
         Death.put(DamageCause.VOID, config.getStringList("DEATH.VOID",null));
+        Death.put(DamageCause.SUICIDE, config.getStringList("DEATH.SUICIDE",null));
         NoCause.put("Unknown", config.getStringList("NoCause.Unknown",null));
         NoCause.put("Suicide", config.getStringList("NoCause.Suicide",null));
         
