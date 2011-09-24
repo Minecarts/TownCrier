@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.minecarts.towncrier.Messages;
 import com.minecarts.towncrier.TownCrier;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 
 public class EntityListener extends org.bukkit.event.entity.EntityListener{ 
@@ -18,9 +19,16 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
     public EntityListener(TownCrier plugin){
         this.plugin = plugin;
     }
+
     @Override
     public void onEntityDeath(EntityDeathEvent eventDeath){
         if(!(eventDeath.getEntity() instanceof Player)) return;
+        
+        //Get rid of Notch's duplicate death messages
+        if(eventDeath instanceof PlayerDeathEvent){
+            ((PlayerDeathEvent) eventDeath).setDeathMessage(null);
+        }
+
         Player victim = (Player) eventDeath.getEntity();
         EntityDamageEvent eventDamage = (EntityDamageEvent) victim.getLastDamageCause();
         if(eventDamage == null){ //No last damage event
@@ -38,7 +46,7 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
                 Player attacker = (Player) event.getDamager();
                 Player[] involvedPlayers = {attacker, victim};
                 //Suicide!
-                if(attacker.getName() == victim.getName()){
+                if(attacker.getName().equals(victim.getName())){
                     plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",DamageCause.SUICIDE), victim.getDisplayName());
                 //PVP Kill
                 } else {
