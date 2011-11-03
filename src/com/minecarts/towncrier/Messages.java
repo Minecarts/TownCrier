@@ -48,6 +48,7 @@ public class Messages {
         CreatureNames.put(CreatureType.SPIDER, config.getStringList("CreatureNames.SPIDER",null));
         CreatureNames.put(CreatureType.WOLF,config.getStringList("CreatureNames.WOLF",null));
         CreatureNames.put(CreatureType.ZOMBIE, config.getStringList("CreatureNames.ZOMBIE",null));
+        CreatureNames.put(CreatureType.ENDERMAN, config.getStringList("CreatureNames.ENDERMAN",null));
         
         ItemNames.put(Material.AIR, config.getStringList("ItemNames.AIR",null));
 
