@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import com.minecarts.towncrier.TownCrier;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import java.text.MessageFormat;
+
 public class EntityListener extends org.bukkit.event.entity.EntityListener{ 
     private TownCrier plugin;
 
@@ -26,9 +28,10 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
         if(event instanceof PlayerDeathEvent){
             ((PlayerDeathEvent) event).setDeathMessage(null);
         }
-        
+
         Player victim = (Player) event.getEntity();
         EntityDamageEvent lastDamageEvent = victim.getLastDamageCause();
+
         if(lastDamageEvent == null){ //No last damage event
             //Unknown causes
             Player[] involvedPlayers = {victim};
@@ -36,9 +39,18 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
             plugin.announceMessage(involvedPlayers,
                     plugin.getSingleAttackMessage("UNKNOWN"),
                     victim.getDisplayName());
-
         } else {
             DamageCause cause = lastDamageEvent.getCause();
+
+            //Log the death location to the console
+            System.out.println(MessageFormat.format("TownCrier> {0} died at ({1},{2},{3}) from {4}",
+                    victim.getName(),
+                    victim.getLocation().getBlockX(),
+                    victim.getLocation().getBlockY(),
+                    victim.getLocation().getBlockZ(),
+                    cause.name()
+            ));
+
             if(lastDamageEvent instanceof EntityDamageByEntityEvent){
                 EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) lastDamageEvent;
                 if(e.getDamager() instanceof Player){
