@@ -8,10 +8,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Player;
 
-import com.minecarts.towncrier.Messages;
 import com.minecarts.towncrier.TownCrier;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 
 public class EntityListener extends org.bukkit.event.entity.EntityListener{ 
     private TownCrier plugin;
@@ -21,58 +19,63 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
     }
 
     @Override
-    public void onEntityDeath(EntityDeathEvent eventDeath){
-        if(!(eventDeath.getEntity() instanceof Player)) return;
+    public void onEntityDeath(EntityDeathEvent event){
+        if(!(event.getEntity() instanceof Player)) return;
         
         //Get rid of Notch's duplicate death messages
-        if(eventDeath instanceof PlayerDeathEvent){
-            ((PlayerDeathEvent) eventDeath).setDeathMessage(null);
+        if(event instanceof PlayerDeathEvent){
+            ((PlayerDeathEvent) event).setDeathMessage(null);
         }
-
-        Player victim = (Player) eventDeath.getEntity();
-        EntityDamageEvent eventDamage = (EntityDamageEvent) victim.getLastDamageCause();
-        if(eventDamage == null){ //No last damage event
+        
+        Player victim = (Player) event.getEntity();
+        EntityDamageEvent lastDamageEvent = victim.getLastDamageCause();
+        if(lastDamageEvent == null){ //No last damage event
             //Unknown causes
-            String format = Messages.getRandomMessage("Unknown");
             Player[] involvedPlayers = {victim};
-            plugin.announceMessage(involvedPlayers, format,victim.getDisplayName());
-        } else if(eventDamage instanceof EntityDamageByEntityEvent){
-            //Entity vs Entity!
-            EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) eventDamage;
-            Integer damage = event.getDamage();
 
-            //PVP of some sort
-            if(event.getDamager() instanceof Player){
-                Player attacker = (Player) event.getDamager();
-                Player[] involvedPlayers = {attacker, victim};
-                //Suicide!
-                if(attacker.getName().equals(victim.getName())){
-                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",DamageCause.SUICIDE), victim.getDisplayName());
-                //PVP Kill
-                } else {
-                    plugin.announceMessage(involvedPlayers,Messages.getRandomMessage("PVP",event.getCause()), victim.getDisplayName(),attacker.getDisplayName(),Messages.getItemName(attacker.getItemInHand().getType()));
-                }
-            //Death by projectile
-            } else if (event.getDamager() instanceof Projectile){
-                org.bukkit.entity.LivingEntity shooter = ((Projectile) event.getDamager()).getShooter();
-                if(shooter instanceof Player){
-                    Player attacker = (Player) shooter;
-                    Player[] involvedPlayers = {victim, attacker};
-                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",event.getCause()),victim.getDisplayName(),attacker.getDisplayName());
-                } else {
+            plugin.announceMessage(involvedPlayers,
+                    plugin.getSingleAttackMessage("UNKNOWN"),
+                    victim.getDisplayName());
+
+        } else {
+            DamageCause cause = lastDamageEvent.getCause();
+            if(lastDamageEvent instanceof EntityDamageByEntityEvent){
+                EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) lastDamageEvent;
+                if(e.getDamager() instanceof Player){
+                    Player attacker = (Player) e.getDamager();
+                    Player[] involvedPlayers = {attacker, victim};
+
+                    //If it's the same player, it's a suicide
+                    if(attacker.getName().equals(victim.getName())){
+                        plugin.announceMessage(involvedPlayers,
+                                plugin.getSingleAttackMessage("SUICIDE"),
+                                victim.getDisplayName());
+                        return;
+                    }
+
+                    plugin.announceMessage(involvedPlayers,
+                            plugin.getMultiAttackMessage("PVP"),
+                            victim.getDisplayName(),
+                            attacker.getDisplayName(),
+                            plugin.getItemName(attacker.getItemInHand().getType())
+                    );
+                    return;
+                } else {  //It wasn't a player, so..
                     Player[] involvedPlayers = {victim};
-                    plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",event.getCause()),victim.getDisplayName(),Messages.getCeatureName(shooter));
+                    plugin.announceMessage(involvedPlayers,
+                            plugin.getMultiAttackMessage(cause.name()),
+                            victim.getDisplayName(),
+                            plugin.getCreatureName(e.getDamager())
+                    );
+                    return;
                 }
-            //Non player entity killed someone
-            } else {
-                Player[] involvedPlayers = {victim};
-                //Entity Kill
-                plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death",event.getCause()), victim.getDisplayName(), Messages.getCeatureName(event.getDamager()));
             }
-        } else { //Not entitydamagedbyentity event
-            Player[] involvedPlayers = {victim};
-            //General death
-            plugin.announceMessage(involvedPlayers, Messages.getRandomMessage("Death", eventDamage.getCause()), victim.getDisplayName());
-        }
-    }
-}
+            //If we got to this point, it had to have been the player dieing alone
+                Player[] involvedPlayers = {victim};
+                plugin.announceMessage(involvedPlayers,
+                        plugin.getSingleAttackMessage(cause.name()),
+                        victim.getDisplayName()
+                );
+        } //lastDamageEvent == null
+    }//onEntityDeath()
+} //class EntityListener
