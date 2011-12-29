@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -85,7 +86,11 @@ public class TownCrier extends org.bukkit.plugin.java.JavaPlugin{
     }
 
     public String getCreatureName(Entity entity){
-        List<String> names = getConfig().getList("CREATURES." + entity.toString());
+        String entityName = entity.toString();
+        if(entity instanceof Wolf){ //Handle wolves becuase they have data in their toString
+            entityName = "CraftWolf";
+        }
+        List<String> names = getConfig().getList("CREATURES." + entityName);
         if(names == null || names.size() == 0) return entity.toString();
         return names.get(random.nextInt(names.size()));
     }

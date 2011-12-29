@@ -1,6 +1,7 @@
 package com.minecarts.towncrier.listener;
 
 
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -39,55 +40,71 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
             plugin.announceMessage(involvedPlayers,
                     plugin.getSingleAttackMessage("UNKNOWN"),
                     victim.getDisplayName());
-        } else {
-            DamageCause cause = lastDamageEvent.getCause();
+            return;
+        }
 
-            //Log the death location to the console
-            System.out.println(MessageFormat.format("TownCrier> {0} died at ({1},{2},{3}) from {4}",
-                    victim.getName(),
-                    victim.getLocation().getBlockX(),
-                    victim.getLocation().getBlockY(),
-                    victim.getLocation().getBlockZ(),
-                    cause.name()
-            ));
+        DamageCause cause = lastDamageEvent.getCause();
 
-            if(lastDamageEvent instanceof EntityDamageByEntityEvent){
-                EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) lastDamageEvent;
-                if(e.getDamager() instanceof Player){
-                    Player attacker = (Player) e.getDamager();
-                    Player[] involvedPlayers = {attacker, victim};
+        //Log the death location to the console
+        System.out.println(MessageFormat.format("TownCrier> {0} died at ({1},{2},{3}) from {4}",
+                victim.getName(),
+                victim.getLocation().getBlockX(),
+                victim.getLocation().getBlockY(),
+                victim.getLocation().getBlockZ(),
+                cause.name()
+        ));
 
-                    //If it's the same player, it's a suicide
-                    if(attacker.getName().equals(victim.getName())){
-                        plugin.announceMessage(involvedPlayers,
-                                plugin.getSingleAttackMessage("SUICIDE"),
-                                victim.getDisplayName());
-                        return;
-                    }
+        if(lastDamageEvent instanceof EntityDamageByEntityEvent){
+            EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) lastDamageEvent;
+            if(e.getDamager() instanceof Player){
+                Player attacker = (Player) e.getDamager();
+                Player[] involvedPlayers = {attacker, victim};
 
+                //If it's the same player, it's a suicide
+                if(attacker.getName().equals(victim.getName())){
                     plugin.announceMessage(involvedPlayers,
-                            plugin.getMultiAttackMessage("PVP"),
-                            victim.getDisplayName(),
-                            attacker.getDisplayName(),
-                            plugin.getItemName(attacker.getItemInHand().getType())
-                    );
+                            plugin.getSingleAttackMessage("SUICIDE"),
+                            victim.getDisplayName());
                     return;
-                } else {  //It wasn't a player, so..
-                    Player[] involvedPlayers = {victim};
+                }
+
+                plugin.announceMessage(involvedPlayers,
+                        plugin.getMultiAttackMessage("PVP"),
+                        victim.getDisplayName(),
+                        attacker.getDisplayName(),
+                        plugin.getItemName(attacker.getItemInHand().getType())
+                );
+                return;
+            }
+            if(e.getDamager() instanceof Wolf){
+                //Check if it's a wolf, if so we need to do some custom things due to the name() returning
+                //  lots of metadata about the object
+                Wolf wolf = (Wolf) e.getDamager();
+                if(wolf.isTamed()){
+                    Player[] involvedPlayers = {victim,(Player)wolf.getOwner()};
                     plugin.announceMessage(involvedPlayers,
-                            plugin.getMultiAttackMessage(cause.name()),
+                            plugin.getMultiAttackMessage("PVP_WOLF"),
                             victim.getDisplayName(),
-                            plugin.getCreatureName(e.getDamager())
+                            ((Player) wolf.getOwner()).getDisplayName()
                     );
                     return;
                 }
             }
-            //If we got to this point, it had to have been the player dieing alone
-                Player[] involvedPlayers = {victim};
-                plugin.announceMessage(involvedPlayers,
-                        plugin.getSingleAttackMessage(cause.name()),
-                        victim.getDisplayName()
-                );
-        } //lastDamageEvent == null
+            //Else at this point, try and handle it based upon the name in the config
+            Player[] involvedPlayers = {victim};
+            plugin.announceMessage(involvedPlayers,
+                    plugin.getMultiAttackMessage(cause.name()),
+                    victim.getDisplayName(),
+                    plugin.getCreatureName(e.getDamager())
+            );
+            return;
+        }
+
+        //If we got to this point, it had to have been the player dieing alone
+            Player[] involvedPlayers = {victim};
+            plugin.announceMessage(involvedPlayers,
+                    plugin.getSingleAttackMessage(cause.name()),
+                    victim.getDisplayName()
+            );
     }//onEntityDeath()
 } //class EntityListener
