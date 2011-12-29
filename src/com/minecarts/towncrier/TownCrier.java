@@ -5,6 +5,9 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.PluginManager;
@@ -45,6 +48,21 @@ public class TownCrier extends org.bukkit.plugin.java.JavaPlugin{
         //Register our events
         pm.registerEvent(Event.Type.CUSTOM_EVENT, this.eventListener, Event.Priority.Monitor, this);
         pm.registerEvent(Event.Type.ENTITY_DEATH, this.entityListener, Event.Priority.Monitor, this);
+
+
+        // reload config command
+        getCommand("crier").setExecutor(new CommandExecutor() {
+            public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+                if(!sender.hasPermission("towncrier.reload")) return true; // "hide" command output for non-ops
+
+                if(args[0].equalsIgnoreCase("reload")) {
+                    TownCrier.this.reloadConfig();
+                    sender.sendMessage("TownCrier config reloaded.");
+                    return true;
+                }
+                return false;
+            }
+        });
 
         log.info("[" + pdf.getName() + "] version " + pdf.getVersion() + " enabled.");
 

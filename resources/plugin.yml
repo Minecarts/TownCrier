@@ -5,3 +5,11 @@ website: http://minecarts.com
 author: Verrier
 depend: [BarrensChat]
 description: Support plugin for server wide announcements
+commands:
+    crier:
+        description: TownCrier commands
+        usage: "/<command> reload"
+permissions:
+    towncrier.reload:
+        description: "Reload the TownCrier config"
+        default: op
