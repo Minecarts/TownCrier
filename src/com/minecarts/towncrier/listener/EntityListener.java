@@ -1,6 +1,7 @@
 package com.minecarts.towncrier.listener;
 
 
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -76,6 +77,34 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener{
                 );
                 return;
             }
+
+            //Check to see if it's an arrow
+            if(e.getDamager() instanceof Arrow){
+                Arrow arrow = (Arrow)e.getDamager();
+                if(arrow.getShooter() instanceof Player){
+                    Player[] involvedPlayers = {victim, (Player)arrow.getShooter()};
+                    plugin.announceMessage(involvedPlayers,
+                            plugin.getMultiAttackMessage(cause.name()),
+                            victim.getDisplayName(),
+                            ((Player)arrow.getShooter()).getDisplayName()
+                    );
+                } else {
+                    String creatureName = "Unknown";
+                    if(arrow.getShooter() == null){
+                        creatureName = "a dispenser";
+                    } else {
+                        creatureName = plugin.getCreatureName(arrow.getShooter());
+                    }
+
+                    Player[] involvedPlayers = {victim};
+                    plugin.announceMessage(involvedPlayers,
+                            plugin.getMultiAttackMessage(cause.name()),
+                            victim.getDisplayName(),
+                            creatureName);
+                }
+                return;
+            }
+
             if(e.getDamager() instanceof Wolf){
                 //Check if it's a wolf, if so we need to do some custom things due to the name() returning
                 //  lots of metadata about the object
