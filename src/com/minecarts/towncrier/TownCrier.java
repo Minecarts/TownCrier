@@ -14,37 +14,29 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import com.minecarts.chitchat.event.ChannelMessage;
+
 import org.bukkit.event.*;
 import org.bukkit.entity.Player;
 
 import com.minecarts.towncrier.listener.*;
 
-import com.minecarts.objectdata.ObjectData;
-import com.minecarts.barrenschat.BarrensChat;
-import com.minecarts.barrenschat.event.ChatChannelAnnounceEvent;
-import com.minecarts.barrenschat.ChatChannel;
 
 public class TownCrier extends org.bukkit.plugin.java.JavaPlugin{
-    public final Logger log = Logger.getLogger("com.minecarts.templateplugin");
+    public final Logger log = Logger.getLogger("com.minecarts.to");
 
     private EntityListener entityListener;
     private EventListener eventListener;
 
-    public BarrensChat barrensChat;
-
-    private ChatChannel announceChannel;
     private final Random random = new Random();
 
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdf = getDescription();
 
-        barrensChat = (BarrensChat) pm.getPlugin("BarrensChat");
-        
+
         eventListener = new EventListener(this);
         entityListener = new EntityListener(this);
-
-        this.announceChannel = barrensChat.channelHelper.getChannelFromName("PVP");
         
         //Register our events
         pm.registerEvent(Event.Type.CUSTOM_EVENT, this.eventListener, Event.Priority.Monitor, this);
@@ -108,7 +100,7 @@ public class TownCrier extends org.bukkit.plugin.java.JavaPlugin{
     }
 
     public void announceMessage(Player[] involvedPlayers, String format, String... args){
-        ChatChannelAnnounceEvent evt = new ChatChannelAnnounceEvent(announceChannel, involvedPlayers, format, args);
+        ChannelMessage evt = new ChannelMessage("Announcement",involvedPlayers, format, args);
         this.getServer().getPluginManager().callEvent(evt);
     }
 }

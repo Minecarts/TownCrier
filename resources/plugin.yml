@@ -3,7 +3,7 @@ main: com.minecarts.towncrier.TownCrier
 version: ${pom.version}
 website: http://minecarts.com
 author: Verrier
-depend: [BarrensChat]
+depend: [ChitChat]
 description: Support plugin for server wide announcements
 commands:
     crier:
