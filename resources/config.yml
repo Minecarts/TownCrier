@@ -108,7 +108,9 @@ DEATH:
         - "{1}{0} died by their own hand."
         - "{1}{0} suicided."
         - "{1}{0} took their own life."
-
+EXTERNAL:
+    SAG_WIN: "{1}{0} defeated {2}{0} at Sand and Gravel!"
+    SAG_TIE: "{1}{0} and {2}{0} tied in an epic match of Sand and Gravel!"
 CREATURES:
     CraftCreeper:
         - "a creeper"
