@@ -8,10 +8,11 @@ import com.minecarts.towncrier.TownCrier;
 
 import com.minecarts.sandandgravel.event.*;
 import com.minecarts.sandandgravel.game.Game.State;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 
-
-public class EventListener extends org.bukkit.event.CustomEventListener{
+public class EventListener implements Listener {
         
     private TownCrier plugin;
     public EventListener(TownCrier plugin){
@@ -22,7 +23,7 @@ public class EventListener extends org.bukkit.event.CustomEventListener{
         GameCompleteEvent,
       }
 
-    @Override
+    @EventHandler
     public void onCustomEvent(Event event){
         try {
             events.valueOf(event.getEventName());

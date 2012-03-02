@@ -3,6 +3,8 @@ package com.minecarts.towncrier.listener;
 
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Wolf;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -15,14 +17,14 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.text.MessageFormat;
 
-public class EntityListener extends org.bukkit.event.entity.EntityListener{ 
+public class EntityListener implements Listener {
     private TownCrier plugin;
 
     public EntityListener(TownCrier plugin){
         this.plugin = plugin;
     }
 
-    @Override
+    @EventHandler
     public void onEntityDeath(EntityDeathEvent event){
         if(!(event.getEntity() instanceof Player)) return;
         
