@@ -24,8 +24,9 @@ public class EventListener implements Listener {
         GameCompleteEvent,
       }
 
+    /* Needs SAG support to throw a new event type
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onCustomEvent(Event event){
+    public void onCustomEvent(CustomEvent event){
         try {
             events.valueOf(event.getEventName());
           } catch (IllegalArgumentException e) {
@@ -54,4 +55,5 @@ public class EventListener implements Listener {
                   break;
           } //switch
     }
+    */
 }
