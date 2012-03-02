@@ -9,6 +9,7 @@ import com.minecarts.towncrier.TownCrier;
 import com.minecarts.sandandgravel.event.*;
 import com.minecarts.sandandgravel.game.Game.State;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 
@@ -23,7 +24,7 @@ public class EventListener implements Listener {
         GameCompleteEvent,
       }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onCustomEvent(Event event){
         try {
             events.valueOf(event.getEventName());
